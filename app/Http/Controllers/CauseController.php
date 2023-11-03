@@ -50,7 +50,8 @@ class CauseController extends Controller
 
             // Resize the image
             $resizedImage = Image::make($imagePath . $imageName)
-                ->fit(500, 393) // Adjust the dimensions as needed
+                // ->fit(500, 393) // Adjust the dimensions as needed
+                ->fit(1491 , 849) // Adjust the dimensions as needed
                 ->save($imagePath . $imageName);
 
             // Save the image path in the database
@@ -96,7 +97,7 @@ class CauseController extends Controller
 
             // Resize the image
             $resizedImage = Image::make($imagePath . $imageName)
-                ->fit(500, 393) // Adjust the dimensions as needed
+                ->fit(1491 , 849) // Adjust the dimensions as needed
                 ->save($imagePath . $imageName);
 
             // Update the image path in the database

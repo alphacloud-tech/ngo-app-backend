@@ -54,7 +54,7 @@ class PartnerController extends Controller
             }
         }
 
-        return redirect()->route('partner.index')->with('success', 'partner list created successfully');
+        return redirect()->route('partner.index')->with('success', 'partner created successfully');
     }
 
 
@@ -94,7 +94,7 @@ class PartnerController extends Controller
 
         // Update the partner model with the validated data
 
-        return redirect()->route('partner.index')->with('success', 'partner list updated successfully');
+        return redirect()->route('partner.index')->with('success', 'partner updated successfully');
     }
 
 
@@ -115,7 +115,7 @@ class PartnerController extends Controller
         // Delete the resource from the database
         $partner->delete();
 
-        return redirect()->route('partner.index')->with('success', 'partner list deleted successfully');
+        return redirect()->route('partner.index')->with('success', 'partner deleted successfully');
     }
 
 

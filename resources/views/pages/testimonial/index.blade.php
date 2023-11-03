@@ -56,12 +56,10 @@
                                         <tr>
                                             <th>S/N</th>
                                             <th>Image</th>
-                                            <th>Causes list title</th>
-                                            <th>Causes list category</th>
-                                            <th>Causes list target amount</th>
-                                            <th>Causes list raised amount</th>
-                                            <th>Causes list description</th>
-                                            <th>Featured</th>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Quote</th>
+                                            <th>Activate/Deactivate</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -74,16 +72,14 @@
                                                 <th>{{ $i++ }}</th>
                                                 <td><img width="100px" src="{{ asset($item->image_url) }}"
                                                         alt="{{ $item->slide_title }}"></td>
-                                                <td>{{ $item->title }} </td>
-                                                <td>{{ $item->causeCategory->name }}</td>
-                                                <td>${{ $item->target_amount }}</td>
-                                                <td>${{ $item->raised_amount }}</td>
-                                                <td>{!! $item->description !!}</td>
+                                                <td>{{ $item->name }} </td>
+                                                <td>{{ $item->position }}</td>
+                                                <td>{!! $item->quote !!}</td>
                                                 <td>
                                                     <label class="switch">
                                                         <input type="checkbox" checked id="toggle"
-                                                            data-cause-id="{{ $item->id }}" name="featured"
-                                                            data-featured="{{ $item->featured ? '1' : '0' }}">
+                                                            data-active-id="{{ $item->id }}" name="active"
+                                                            data-active="{{ $item->active ? '1' : '0' }}">
                                                         <span class="slider round"></span>
                                                     </label>
                                                 </td>
@@ -130,38 +126,23 @@
                                                             <div class="modal-body">
                                                                 <p>
                                                                 <div class="form-row">
+
                                                                     <div class="form-group col-md-6">
-                                                                        <label>Title</label>
+                                                                        <label>Name</label>
                                                                         <input type="text" class="form-control"
-                                                                            placeholder="" name="title"
-                                                                            value="{{ $item->title }}">
+                                                                            placeholder="" name="name"
+                                                                            value="{{ $item->name }}">
                                                                     </div>
 
                                                                     <div class="form-group col-md-6">
-                                                                        <label>Category</label>
-                                                                        <select class="custom-select"
-                                                                            name="cause_category_id">
-                                                                            <option value="" selected>Choose category
-                                                                            </option> <!-- Preselect the default option -->
-                                                                            @foreach ($causeCategories as $category)
-                                                                                <option value="{{ $category->id }}"
-                                                                                    @if ($category->id == $item->causeCategory->id) selected @endif>
-                                                                                    {{ $category->name }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
+                                                                        <label>Position</label>
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="" name="position"
+                                                                            value="{{ $item->position }}">
                                                                     </div>
 
-
                                                                     <div class="form-group col-md-6">
-                                                                        <label>Target amount</label>
-                                                                        <input type="number" step="0.01"
-                                                                            class="form-control" placeholder=""
-                                                                            name="target_amount"
-                                                                            value="{{ $item->target_amount }}">
-                                                                    </div>
-                                                                    <div class="form-group col-md-6">
-                                                                        <label>Image</label>
+                                                                        <label>Image <i style="color: red">(300 by 300)</i></label>
                                                                         <div class="input-group mb-3">
                                                                             <div class="input-group-prepend">
                                                                                 <span class="input-group-text">Upload</span>
@@ -169,15 +150,37 @@
                                                                             <div class="custom-file">
                                                                                 <input type="file"
                                                                                     class="custom-file-input"
-                                                                                    name="image_url">
+                                                                                    name="image_url" id="imageInput"
+                                                                                    onchange="previewImageOne(this);">
                                                                                 <label class="custom-file-label">Choose
                                                                                     file</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="form-group col-md-6">
+                                                                        <label>Preview</label>
+                                                                        <div class="input-group mb-3">
+                                                                            {{-- <div class="input-group-prepend">
+                                                                                <span class="input-group-text">Upload</span>
+                                                                            </div>
+                                                                            <div class="custom-file">
+                                                                                <input type="file"
+                                                                                    class="custom-file-input"
+                                                                                    name="image_url" id="imageInput"
+                                                                                    onchange="previewImageOne(this);">
+                                                                                <label class="custom-file-label">Choose
+                                                                                    file</label>
+                                                                            </div> --}}
+                                                                            <img id="imagePreviewOne"
+                                                                                src="{{ asset($item->image_url) }}"
+                                                                                alt="Image Preview"
+                                                                                style="max-width: 100%; display: non;">
+                                                                        </div>
+                                                                    </div>
+
                                                                     <div class="form-group col-md-12">
-                                                                        <label>Description</label>
-                                                                        <textarea class="summernote" name="description">{{ $item->description }}</textarea>
+                                                                        <label>Quote</label>
+                                                                        <textarea class="summernote" name="quote">{{ $item->quote }}</textarea>
                                                                         {{-- <div class="summernote"></div> --}}
                                                                     </div>
 
@@ -209,7 +212,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{ route('causes.destroy', $item->id) }}"
+                                                            <form action="{{ route('testimonial.destroy', $item->id) }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -252,41 +255,44 @@
                                 <p>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label>Title</label>
-                                        <input type="text" class="form-control" placeholder="" name="title"
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" placeholder="" name="name"
                                             value="">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Category</label>
-                                        <select class="custom-select" name="cause_category_id">
-                                            <option selected="">Choose category</option>
-                                            @foreach ($causeCategories as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                            @endforeach
-                                        </select>
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label>Target amount</label>
-                                        <input type="number" step="0.01" class="form-control" placeholder=""
-                                            name="target_amount" value="">
+                                        <label>Position</label>
+                                        <input type="text" class="form-control" placeholder="" name="position"
+                                            value="">
                                     </div>
+
                                     <div class="form-group col-md-6">
-                                        <label>Image</label>
+                                        <label>Image <i style="color: red">(300 by 300)</i></label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Upload</span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="image_url">
+                                                <input type="file" class="custom-file-input" name="image_url"
+                                                    id="imageInput" onchange="previewImageOne(this);">
                                                 <label class="custom-file-label">Choose
                                                     file</label>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Preview</label>
+                                        <div class="input-group mb-3">
+                                            <img id="imagePreviewOne" src="" alt="Image Preview"
+                                                style="max-width: 100%; display: none;">
+                                        </div>
+                                    </div>
+
+
                                     <div class="form-group col-md-12">
-                                        <label>Description</label>
-                                        <textarea class="summernote" name="description"></textarea>
+                                        <label>Quote</label>
+                                        <textarea class="summernote" name="quote"></textarea>
                                         {{-- <div class="summernote"></div> --}}
                                     </div>
 
@@ -313,9 +319,6 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> --}}
-    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> --}}
 
     <style>
         .switch {
@@ -484,20 +487,41 @@
 
 
 @section('scripts')
-    {{-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="{{ asset('js/multislider.js') }}"></script> --}}
+
+    <script>
+        function previewImageOne(input) {
+            var preview = document.getElementById('imagePreviewOne');
+            var file = input.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block'; // Show the image preview
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                // No file selected or invalid file
+                preview.src = '#';
+                preview.style.display = 'none'; // Hide the image preview
+            }
+        }
+    </script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            const toggleElements = document.querySelectorAll('input[name="featured"]');
+            const toggleElements = document.querySelectorAll('input[name="active"]');
             toggleElements.forEach(function(toggle) {
-                const isFeatured = toggle.getAttribute('data-featured');
-                toggle.checked = isFeatured === '1';
+                const isActive = toggle.getAttribute('data-active');
+                toggle.checked = isActive === '1';
                 // Add an event listener to handle changes and make AJAX requests
                 toggle.addEventListener('change', function() {
-                    const causeId = toggle.getAttribute('data-cause-id');
+                    const activeId = toggle.getAttribute('data-active-id');
                     const isChecked = toggle.checked;
 
                     $.ajaxSetup({
@@ -506,25 +530,26 @@
                         },
                     });
 
-                    // Send an AJAX request to update the "featured" status
+                    // Send an AJAX request to update the "active" status
                     $.ajax({
                         type: 'POST',
-                        url: `/update-featured/${causeId}`,
+                        url: `/testimonial-activate/${activeId}`,
                         data: {
-                            featured: isChecked ? '1' : '0'
+                            active: isChecked ? '1' : '0'
                         },
                         success: function(data) {
                             if (data.success) {
                                 if (isChecked) {
-                                    Swal.fire('Success', 'Cause list is now featured.',
+                                    Swal.fire('Success',
+                                        'Testimonial activated successfully.',
                                         'success');
                                 } else {
                                     Swal.fire('Success',
-                                        'Cause list is no longer featured.',
+                                        'Testimonial deactivated successfully.',
                                         'success');
                                 }
                             } else {
-                                Swal.fire('Error', 'Error updating featured status.',
+                                Swal.fire('Error', 'Error updating testimonial status.',
                                     'error');
                             }
                         },

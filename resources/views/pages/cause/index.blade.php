@@ -78,7 +78,7 @@
                                                 <td>{{ $item->causeCategory->name }}</td>
                                                 <td>${{ $item->target_amount }}</td>
                                                 <td>${{ $item->raised_amount }}</td>
-                                                <td>{!! $item->description !!}</td>
+                                                <td>{!! \Illuminate\Support\Str::limit($item->description, 100) !!}</td>
                                                 <td>
                                                     <label class="switch">
                                                         <input type="checkbox" checked id="toggle"
@@ -89,33 +89,6 @@
                                                 </td>
 
                                                 <td>
-                                                    {{-- <div class="row">
-                                                        <div class="col-md-6">
-                                                            <button type="button" class="btn btn-rounded btn-primary"
-                                                                data-toggle="modal"
-                                                                data-target="#editModalCenter{{ $item->id }}">
-                                                                <span class="btn-icon-left text-info"><i
-                                                                        class="fa fa-edit color-info"
-                                                                        style="color: #593BDB"></i></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <form action="{{ route('slider.destroy', $item->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-rounded btn-danger">
-                                                                    <span class="btn-icon-left text-info"><i
-                                                                            class="fa fa-trash color-info"
-                                                                            style="color: red"></i></span>
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div> --}}
-
-
-                                                    {{-- <a href="#" class="view" title="View" data-toggle="tooltip"><i
-                                                            class="material-icons">&#xE417;</i></a> --}}
 
                                                     <a type="button" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#editModalCenter{{ $item->id }}" class="edit"
@@ -341,9 +314,6 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> --}}
-    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> --}}
 
     <style>
         .switch {

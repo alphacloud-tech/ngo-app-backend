@@ -60,7 +60,7 @@ class SliderController extends Controller
         $data = $request->validate([
             'slide_title' => 'required',
             'slide_subtitle' => 'required',
-            'image_url' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_url' => 'image|mimes:jpeg,png,jpg,gif|max:20048',
         ]);
 
         $old_img  = $request->old_img;

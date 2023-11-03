@@ -19,11 +19,11 @@
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Cause list</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Team list</a></li>
                         <li class="breadcrumb-item active">
 
                             <a href="javascript:void(0)" data-toggle="modal" data-target="#exampleModalCenter">Add
-                                Cause List</a>
+                                Team</a>
                         </li>
 
                     </ol>
@@ -47,7 +47,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Cause lists</h4>
+                            <h4 class="card-title">Team lists</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -56,12 +56,13 @@
                                         <tr>
                                             <th>S/N</th>
                                             <th>Image</th>
-                                            <th>Causes list title</th>
-                                            <th>Causes list category</th>
-                                            <th>Causes list target amount</th>
-                                            <th>Causes list raised amount</th>
-                                            <th>Causes list description</th>
-                                            <th>Featured</th>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Skills</th>
+                                            <th>Personal Experience</th>
+                                            <th>Activate/Deactivate</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -69,53 +70,29 @@
                                         @php
                                             $i = 1;
                                         @endphp
-                                        @foreach ($causes as $item)
+                                        @foreach ($volunteers as $item)
                                             <tr>
                                                 <th>{{ $i++ }}</th>
                                                 <td><img width="100px" src="{{ asset($item->image_url) }}"
                                                         alt="{{ $item->slide_title }}"></td>
-                                                <td>{{ $item->title }} </td>
-                                                <td>{{ $item->causeCategory->name }}</td>
-                                                <td>${{ $item->target_amount }}</td>
-                                                <td>${{ $item->raised_amount }}</td>
-                                                <td>{!! $item->description !!}</td>
+                                                <td>{{ $item->name }} </td>
+                                                <td>{{ $item->position }} </td>
+                                                <td>{{ $item->email }} </td>
+                                                <td>{{ $item->phone }} </td>
+                                                <td>{{ $item->skills }} </td>
+                                                <td> {!! \Illuminate\Support\Str::limit($item->personal_experience, 200) !!} </td>
+
                                                 <td>
                                                     <label class="switch">
                                                         <input type="checkbox" checked id="toggle"
-                                                            data-cause-id="{{ $item->id }}" name="featured"
-                                                            data-featured="{{ $item->featured ? '1' : '0' }}">
+                                                            data-active-id="{{ $item->id }}" name="active"
+                                                            data-active="{{ $item->active ? '1' : '0' }}">
                                                         <span class="slider round"></span>
                                                     </label>
                                                 </td>
 
+
                                                 <td>
-                                                    {{-- <div class="row">
-                                                        <div class="col-md-6">
-                                                            <button type="button" class="btn btn-rounded btn-primary"
-                                                                data-toggle="modal"
-                                                                data-target="#editModalCenter{{ $item->id }}">
-                                                                <span class="btn-icon-left text-info"><i
-                                                                        class="fa fa-edit color-info"
-                                                                        style="color: #593BDB"></i></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <form action="{{ route('slider.destroy', $item->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-rounded btn-danger">
-                                                                    <span class="btn-icon-left text-info"><i
-                                                                            class="fa fa-trash color-info"
-                                                                            style="color: red"></i></span>
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div> --}}
-
-
-                                                    {{-- <a href="#" class="view" title="View" data-toggle="tooltip"><i
-                                                            class="material-icons">&#xE417;</i></a> --}}
 
                                                     <a type="button" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#editModalCenter{{ $item->id }}" class="edit"
@@ -140,7 +117,7 @@
                                                 aria-hidden="true" style="display: none;">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
-                                                        <form action="{{ route('causes.update', $item->id) }}"
+                                                        <form action="{{ route('volunteer.update', $item->id) }}"
                                                             method="POST" enctype="multipart/form-data">
 
                                                             @csrf
@@ -159,40 +136,44 @@
                                                                 <p>
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-6">
-                                                                        <label>Title</label>
+                                                                        <label>Name</label>
                                                                         <input type="text" class="form-control"
-                                                                            placeholder="" name="title"
-                                                                            value="{{ $item->title }}">
+                                                                            placeholder="" name="name"
+                                                                            value="{{ $item->name }}">
+                                                                    </div>
+                                                                    <div class="form-group col-md-6">
+                                                                        <label>Position</label>
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="" name="position"
+                                                                            value="{{ $item->position }}">
+                                                                    </div>
+                                                                    <div class="form-group col-md-6">
+                                                                        <label>Email</label>
+                                                                        <input type="email" class="form-control"
+                                                                            placeholder="" name="email"
+                                                                            value="{{ $item->email }}">
+                                                                    </div>
+                                                                    <div class="form-group col-md-6">
+                                                                        <label>Phone</label>
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="" name="phone"
+                                                                            value="{{ $item->phone }}">
                                                                     </div>
 
                                                                     <div class="form-group col-md-6">
-                                                                        <label>Category</label>
-                                                                        <select class="custom-select"
-                                                                            name="cause_category_id">
-                                                                            <option value="" selected>Choose category
-                                                                            </option> <!-- Preselect the default option -->
-                                                                            @foreach ($causeCategories as $category)
-                                                                                <option value="{{ $category->id }}"
-                                                                                    @if ($category->id == $item->causeCategory->id) selected @endif>
-                                                                                    {{ $category->name }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
+                                                                        <label>Skills (<i
+                                                                                style="color: #E34724">Comma-separated</i>)</label>
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="" name="skills"
+                                                                            value="{{ $item->skills }}">
                                                                     </div>
 
-
-                                                                    <div class="form-group col-md-6">
-                                                                        <label>Target amount</label>
-                                                                        <input type="number" step="0.01"
-                                                                            class="form-control" placeholder=""
-                                                                            name="target_amount"
-                                                                            value="{{ $item->target_amount }}">
-                                                                    </div>
                                                                     <div class="form-group col-md-6">
                                                                         <label>Image</label>
                                                                         <div class="input-group mb-3">
                                                                             <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Upload</span>
+                                                                                <span
+                                                                                    class="input-group-text">Upload</span>
                                                                             </div>
                                                                             <div class="custom-file">
                                                                                 <input type="file"
@@ -203,9 +184,10 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="form-group col-md-12">
                                                                         <label>Description</label>
-                                                                        <textarea class="summernote" name="description">{{ $item->description }}</textarea>
+                                                                        <textarea class="summernote" name="personal_experience">{{ $item->personal_experience }}</textarea>
                                                                         {{-- <div class="summernote"></div> --}}
                                                                     </div>
 
@@ -237,7 +219,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{ route('causes.destroy', $item->id) }}"
+                                                            <form action="{{ route('volunteer.destroy', $item->id) }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -268,7 +250,7 @@
             <div class="modal fade" id="exampleModalCenter" aria-hidden="true" style="display: none;">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <form action="{{ route('causes.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('volunteer.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="modal-header">
@@ -280,24 +262,29 @@
                                 <p>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label>Title</label>
-                                        <input type="text" class="form-control" placeholder="" name="title"
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" placeholder="" name="name"
                                             value="">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>Category</label>
-                                        <select class="custom-select" name="cause_category_id">
-                                            <option selected="">Choose category</option>
-                                            @foreach ($causeCategories as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                            @endforeach
-                                        </select>
+                                        <label>Position</label>
+                                        <input type="text" class="form-control" placeholder="" name="position"
+                                            value="">
                                     </div>
-
                                     <div class="form-group col-md-6">
-                                        <label>Target amount</label>
-                                        <input type="number" step="0.01" class="form-control" placeholder=""
-                                            name="target_amount" value="">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" placeholder="" name="email"
+                                            value="">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Phone</label>
+                                        <input type="text" class="form-control" placeholder="" name="phone"
+                                            value="">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Skills (<i style="color: #E34724">Comma-separated</i>)</label>
+                                        <input type="text" class="form-control" placeholder="" name="skills"
+                                            value="">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Image</label>
@@ -314,7 +301,7 @@
                                     </div>
                                     <div class="form-group col-md-12">
                                         <label>Description</label>
-                                        <textarea class="summernote" name="description"></textarea>
+                                        <textarea class="summernote" name="personal_experience"></textarea>
                                         {{-- <div class="summernote"></div> --}}
                                     </div>
 
@@ -341,9 +328,6 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> --}}
-    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> --}}
 
     <style>
         .switch {
@@ -519,40 +503,41 @@
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            const toggleElements = document.querySelectorAll('input[name="featured"]');
+            const toggleElements = document.querySelectorAll('input[name="active"]');
             toggleElements.forEach(function(toggle) {
-                const isFeatured = toggle.getAttribute('data-featured');
-                toggle.checked = isFeatured === '1';
+                const isActive = toggle.getAttribute('data-active');
+                toggle.checked = isActive === '1';
                 // Add an event listener to handle changes and make AJAX requests
                 toggle.addEventListener('change', function() {
-                    const causeId = toggle.getAttribute('data-cause-id');
+                    const activeId = toggle.getAttribute('data-active-id');
                     const isChecked = toggle.checked;
-
+                    // alert(activeId);
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                         },
                     });
 
-                    // Send an AJAX request to update the "featured" status
+                    // Send an AJAX request to update the "active" status
                     $.ajax({
                         type: 'POST',
-                        url: `/update-featured/${causeId}`,
+                        url: `/volunteer-activate/${activeId}`,
                         data: {
-                            featured: isChecked ? '1' : '0'
+                            active: isChecked ? '1' : '0'
                         },
                         success: function(data) {
                             if (data.success) {
                                 if (isChecked) {
-                                    Swal.fire('Success', 'Cause list is now featured.',
+                                    Swal.fire('Success',
+                                        'Volunteer activated successfully.',
                                         'success');
                                 } else {
                                     Swal.fire('Success',
-                                        'Cause list is no longer featured.',
+                                        'Volunteer deactivated successfully.',
                                         'success');
                                 }
                             } else {
-                                Swal.fire('Error', 'Error updating featured status.',
+                                Swal.fire('Error', 'Error updating volunteer status.',
                                     'error');
                             }
                         },

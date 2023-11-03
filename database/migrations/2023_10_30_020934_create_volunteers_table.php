@@ -15,6 +15,20 @@ class CreateVolunteersTable extends Migration
     {
         Schema::create('volunteers', function (Blueprint $table) {
             $table->id();
+
+            $table->string('name');
+            $table->string('position');
+            $table->string('image_url');
+            // $table->string('expertise');
+            // $table->integer('experience_years');
+            $table->string('email');
+            $table->string('phone');
+            // $table->string('fax');
+            $table->text('personal_experience');
+            $table->string('skills');
+            $table->boolean('active')->default(false);
+
+
             $table->timestamps();
         });
     }

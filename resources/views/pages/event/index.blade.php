@@ -22,8 +22,8 @@
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Cause list</a></li>
                         <li class="breadcrumb-item active">
 
-                            <a href="javascript:void(0)" data-toggle="modal" data-target="#exampleModalCenter">Add
-                                Cause List</a>
+                            <a href="javascript:void(0)" data-toggle="modal" data-target="#addEventModal">Add
+                                Event</a>
                         </li>
 
                     </ol>
@@ -44,220 +44,149 @@
             @endif
 
             <div class="row">
-                <div class="col-lg-12">
+                {{-- <div class="col-lg-3">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Cause lists</h4>
-                        </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-responsive-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>Image</th>
-                                            <th>Causes list title</th>
-                                            <th>Causes list category</th>
-                                            <th>Causes list target amount</th>
-                                            <th>Causes list raised amount</th>
-                                            <th>Causes list description</th>
-                                            <th>Featured</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $i = 1;
-                                        @endphp
-                                        @foreach ($causes as $item)
-                                            <tr>
-                                                <th>{{ $i++ }}</th>
-                                                <td><img width="100px" src="{{ asset($item->image_url) }}"
-                                                        alt="{{ $item->slide_title }}"></td>
-                                                <td>{{ $item->title }} </td>
-                                                <td>{{ $item->causeCategory->name }}</td>
-                                                <td>${{ $item->target_amount }}</td>
-                                                <td>${{ $item->raised_amount }}</td>
-                                                <td>{!! $item->description !!}</td>
-                                                <td>
-                                                    <label class="switch">
-                                                        <input type="checkbox" checked id="toggle"
-                                                            data-cause-id="{{ $item->id }}" name="featured"
-                                                            data-featured="{{ $item->featured ? '1' : '0' }}">
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </td>
+                            <h4 class="card-intro-title">Calendar</h4>
 
-                                                <td>
-                                                    {{-- <div class="row">
-                                                        <div class="col-md-6">
-                                                            <button type="button" class="btn btn-rounded btn-primary"
-                                                                data-toggle="modal"
-                                                                data-target="#editModalCenter{{ $item->id }}">
-                                                                <span class="btn-icon-left text-info"><i
-                                                                        class="fa fa-edit color-info"
-                                                                        style="color: #593BDB"></i></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <form action="{{ route('slider.destroy', $item->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-rounded btn-danger">
-                                                                    <span class="btn-icon-left text-info"><i
-                                                                            class="fa fa-trash color-info"
-                                                                            style="color: red"></i></span>
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div> --}}
+                            <div class="">
+                                <div id="external-events" class="my-3">
+                                    <p>Drag and drop your event or click in the calendar</p>
+                                    <div class="external-event" data-class="bg-primary"><i class="fa fa-move"></i>New Theme
+                                        Release</div>
+                                    <div class="external-event" data-class="bg-success"><i class="fa fa-move"></i>My Event
+                                    </div>
+                                    <div class="external-event" data-class="bg-warning"><i class="fa fa-move"></i>Meet
+                                        manager</div>
+                                    <div class="external-event" data-class="bg-dark"><i class="fa fa-move"></i>Create New
+                                        theme</div>
+                                </div>
+                                <!-- checkbox -->
+                                <div class="checkbox checkbox-event pt-3 pb-5">
+                                    <input id="drop-remove" class="styled-checkbox" type="checkbox">
+                                    <label class="ml-2 mb-0" for="drop-remove">Remove After Drop</label>
+                                </div>
+                                <a href="javascript:void()" data-toggle="modal" data-target="#add-category"
+                                    class="btn btn-primary btn-event w-100">
+                                    <span class="align-middle"><i class="ti-plus"></i></span> Create New
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div> --}}
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-intro-title">Create event organizer</h4>
 
+                            <div class="">
+                                <div id="external-events" class="my-3">
+                                    <form action="{{ route('event-organizer.store') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
 
-                                                    {{-- <a href="#" class="view" title="View" data-toggle="tooltip"><i
-                                                            class="material-icons">&#xE417;</i></a> --}}
-
-                                                    <a type="button" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#editModalCenter{{ $item->id }}" class="edit"
-                                                        title="Edit" data-toggle="tooltip">
-                                                        <i class="material-icons"
-                                                            style="color: #fff; font-weight:700">&#xE254;</i>
-                                                    </a>
-
-                                                    <a type="button" class="btn btn-danger" data-toggle="modal"
-                                                        data-target="#deleteModalCenter{{ $item->id }}" class="delete"
-                                                        title="Delete" data-toggle="tooltip">
-                                                        <i class="material-icons"
-                                                            style="color: #fff; font-weight:700">&#xE872;</i>
-                                                    </a>
-                                                </td>
-
-
-                                            </tr>
-
-                                            <!-- Edit Modal -->
-                                            <div class="modal fade" id="editModalCenter{{ $item->id }}"
-                                                aria-hidden="true" style="display: none;">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <form action="{{ route('causes.update', $item->id) }}"
-                                                            method="POST" enctype="multipart/form-data">
-
-                                                            @csrf
-                                                            @method('PUT')
-
-                                                            <input type="hidden" value="{{ $item->image_url }}"
-                                                                name="old_img">
-
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Edit cause list</h5>
-                                                                <button type="button" class="close"
-                                                                    data-dismiss="modal"><span>×</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>
-                                                                <div class="form-row">
-                                                                    <div class="form-group col-md-6">
-                                                                        <label>Title</label>
-                                                                        <input type="text" class="form-control"
-                                                                            placeholder="" name="title"
-                                                                            value="{{ $item->title }}">
-                                                                    </div>
-
-                                                                    <div class="form-group col-md-6">
-                                                                        <label>Category</label>
-                                                                        <select class="custom-select"
-                                                                            name="cause_category_id">
-                                                                            <option value="" selected>Choose category
-                                                                            </option> <!-- Preselect the default option -->
-                                                                            @foreach ($causeCategories as $category)
-                                                                                <option value="{{ $category->id }}"
-                                                                                    @if ($category->id == $item->causeCategory->id) selected @endif>
-                                                                                    {{ $category->name }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-
-
-                                                                    <div class="form-group col-md-6">
-                                                                        <label>Target amount</label>
-                                                                        <input type="number" step="0.01"
-                                                                            class="form-control" placeholder=""
-                                                                            name="target_amount"
-                                                                            value="{{ $item->target_amount }}">
-                                                                    </div>
-                                                                    <div class="form-group col-md-6">
-                                                                        <label>Image</label>
-                                                                        <div class="input-group mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Upload</span>
-                                                                            </div>
-                                                                            <div class="custom-file">
-                                                                                <input type="file"
-                                                                                    class="custom-file-input"
-                                                                                    name="image_url">
-                                                                                <label class="custom-file-label">Choose
-                                                                                    file</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group col-md-12">
-                                                                        <label>Description</label>
-                                                                        <textarea class="summernote" name="description">{{ $item->description }}</textarea>
-                                                                        {{-- <div class="summernote"></div> --}}
-                                                                    </div>
-
-                                                                </div>
-
-                                                                </p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Close</button>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary">Save</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                        <div class="modal-body">
+                                            <p>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label>Name</label>
+                                                    <input type="text" class="form-control" placeholder="" name="name"
+                                                        value="">
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label>Phone</label>
+                                                    <input type="text" class="form-control" placeholder="" name="phone"
+                                                        value="">
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label>Email</label>
+                                                    <input type="text" class="form-control" placeholder="" name="email"
+                                                        value="">
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label>Website url</label>
+                                                    <input type="text" class="form-control" placeholder="" name="website"
+                                                        value="">
                                                 </div>
                                             </div>
 
-                                            {{-- delete modal  --}}
-                                            <div class="modal fade" id="deleteModalCenter{{ $item->id }}"
-                                                aria-hidden="true" style="display: none;">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- checkbox -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="calendar" class="app-fullcalendar"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- BEGIN MODAL -->
+                <div class="modal fade none-border" id="event-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title"><strong>Add New Event</strong></h4>
+                            </div>
+                            <div class="modal-body"></div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default waves-effect"
+                                    data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success save-event waves-effect waves-light">Create
+                                    event</button>
 
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Delete cause list</h5>
-                                                            <button type="button" class="close"
-                                                                data-dismiss="modal"><span>×</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="{{ route('causes.destroy', $item->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
+                                <button type="button" class="btn btn-danger delete-event waves-effect waves-light"
+                                    data-dismiss="modal">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                                                <p>Are you sure you want to delete?</p>
-
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-dismiss="modal">Close</button>
-                                                                    <button type="submit"
-                                                                        class="btn btn-danger">Delete</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                <!-- Modal Add Category -->
+                <div class="modal fade none-border" id="add-category">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title"><strong>Add a category</strong></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="control-label">Category Name</label>
+                                            <input class="form-control form-white" placeholder="Enter name" type="text"
+                                                name="category-name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="control-label">Choose Category Color</label>
+                                            <select class="form-control form-white" data-placeholder="Choose a color..."
+                                                name="category-color">
+                                                <option value="success">Success</option>
+                                                <option value="danger">Danger</option>
+                                                <option value="info">Info</option>
+                                                <option value="pink">Pink</option>
+                                                <option value="primary">Primary</option>
+                                                <option value="warning">Warning</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default waves-effect"
+                                    data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-danger waves-effect waves-light save-category"
+                                    data-dismiss="modal">Save</button>
                             </div>
                         </div>
                     </div>
@@ -265,14 +194,14 @@
             </div>
 
             <!-- Add Modal -->
-            <div class="modal fade" id="exampleModalCenter" aria-hidden="true" style="display: none;">
+            <div class="modal fade" id="addEventModal" aria-hidden="true" style="display: none;">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <form action="{{ route('causes.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('event.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="modal-header">
-                                <h5 class="modal-title">Create cause list</h5>
+                                <h5 class="modal-title">Create event</h5>
                                 <button type="button" class="close" data-dismiss="modal"><span>×</span>
                                 </button>
                             </div>
@@ -284,21 +213,23 @@
                                         <input type="text" class="form-control" placeholder="" name="title"
                                             value="">
                                     </div>
+
                                     <div class="form-group col-md-6">
-                                        <label>Category</label>
-                                        <select class="custom-select" name="cause_category_id">
-                                            <option selected="">Choose category</option>
-                                            @foreach ($causeCategories as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        <label>Organizer</label>
+                                        <select class="custom-select" name="event_organizer_id">
+                                            <option selected="">Choose organizer</option>
+                                            @foreach ($eventOrganizers as $organizer)
+                                                <option value="{{ $organizer->id }}">{{ $organizer->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label>Target amount</label>
-                                        <input type="number" step="0.01" class="form-control" placeholder=""
-                                            name="target_amount" value="">
+                                        <label>Date</label>
+
+                                        <input value=`${selectedDate}` name="date" class="datepicker-default form-control" id="datepicker">
                                     </div>
+
                                     <div class="form-group col-md-6">
                                         <label>Image</label>
                                         <div class="input-group mb-3">
@@ -312,10 +243,44 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Start time</label>
+                                        <div class="input-group clockpicker" data-placement="bottom" data-align="top"
+                                            data-autoclose="true">
+                                            <input type="text" class="form-control" value="13:14" name="start_time">
+                                            <span class="input-group-append"><span class="input-group-text"><i
+                                                        class="fa fa-clock-o"></i></span></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>End time</label>
+                                        <div class="input-group clockpicker" data-placement="bottom" data-align="top"
+                                            data-autoclose="true">
+                                            <input type="text" class="form-control" value="13:14" name="end_time">
+                                            <span class="input-group-append"><span class="input-group-text"><i
+                                                        class="fa fa-clock-o"></i></span></span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-md-6">
+                                        <label>Location</label>
+                                        <input type="text" class="form-control" placeholder="" name="location"
+                                            value="">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Location map (<i style="color: #E34724">Google Iframe -
+                                                optional</i>)</label>
+                                        <input type="text" class="form-control" placeholder="" name="location_map"
+                                            value="">
+                                    </div>
+
                                     <div class="form-group col-md-12">
                                         <label>Description</label>
                                         <textarea class="summernote" name="description"></textarea>
-                                        {{-- <div class="summernote"></div> --}}
                                     </div>
 
                                 </div>
@@ -329,6 +294,56 @@
                     </div>
                 </div>
             </div>
+
+
+            <!-- Event Modal -->
+            <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5 id="modal-title"></h5>
+                            <p><span id="modal-description"></span></p>
+                            <p>Date: <span id="modal-date"></span></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            {{-- /////////////////////data-target="#eventModal"///////////////// --}}
+
+
+            {{-- <div class="modal fade" id="exampleModalCenter" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal"><span>×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                                egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
+
         </div>
     </div>
 @endsection
@@ -344,6 +359,8 @@
     {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> --}}
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> --}}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <style>
         .switch {
@@ -508,6 +525,20 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <style>
+        /* .custom-day-cell {
+                                    position: relative;
+                                } */
+
+        .add-event-icon {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            font-size: 20px;
+            /* color: red */
+        }
+    </style>
 @endsection
 
 
@@ -562,6 +593,101 @@
                     });
                 });
             });
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var events = @json($events);
+
+            var formattedEvents = events.map(function(event) {
+                return {
+                    title: event.title,
+                    start: event.date, // Use only the date
+                    description: event.description, // Use only the date
+                    backgroundColor: '#353C5E',
+                    borderColor: '#353C5E',
+                };
+            });
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                events: formattedEvents,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                initialView: 'dayGridMonth',
+
+                dayCellContent: function(arg) {
+                    // var buttonHtml = '<button class="add-event-button btn-sm" data-toggle="modal" data-target="#addEventModal">Add Event</button>';
+
+                    var isPastDay = arg.date < new Date(); // Check if the date is in the past
+
+                    var buttonHtml = isPastDay ? '' :
+                        '<i class="fa fa-plus add-event-icon" data-toggle="modal" data-target="#addEventModal"></i>';
+                    var dayClass = isPastDay ? 'past-day' : '';
+
+                    // var buttonHtml =
+                    //     '<i class="fa fa-plus add-event-icon" data-toggle="modal" data-target="#addEventModal"></i>';
+
+
+                    return {
+                        html: '<div class="custom-day-cell ' + dayClass + '">' + arg.dayNumberText +
+                            buttonHtml +
+                            '</div>',
+                    };
+                    // return {
+                    //     html: '<div class="custom-day-cell">' + arg.dayNumberText + buttonHtml +
+                    //         '</div>',
+                    // };
+                },
+
+                // dayCellContent: function(arg) {
+                //     var buttonHtml =
+                //         '<i class="fas fa-plus add-event-icon" data-toggle="modal" data-target="#eventModal"></i>';
+
+                //     return {
+                //         html: '<div class="custom-day-cell">' + arg.dayNumberText + buttonHtml +
+                //             '</div>',
+                //     };
+                // },
+
+                eventClick: function(info) {
+
+                    // if (info.jsEvent.target.classList.contains('add-event-button')) {
+                    //     // Handle the button click here, e.g., show a modal to add an event for the selected day.
+                    //     var selectedDate = info.dateStr;
+                    //     // Implement your logic to open an event creation modal for the selected date.
+                    //     console.log('Add event for date: ' + selectedDate);
+                    // }
+
+                    // Handle event click, e.g., show event details
+                    // Get the event title and date
+                    var eventTitle = info.event.title;
+                    var eventDate = info.event.start;
+                    var selectedDate = info.event.start;
+                    var eventDesc = info.event.extendedProps
+                        .description; // Assumes you have a description property in your event data
+
+                    // Update the modal content
+                    document.getElementById('modal-title').textContent = eventTitle;
+                    // document.getElementById('modal-description').textContent = eventDesc;
+                    document.getElementById('modal-description').innerHTML =
+                        eventDesc; // Render HTML content
+
+                    document.getElementById('modal-date').textContent = eventDate.toDateString();
+
+                    // Show the modal
+                    $('#eventModal').modal('show');
+                }
+
+            });
+
+            calendar.render();
+
         });
     </script>
 @endsection
