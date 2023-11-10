@@ -36,7 +36,7 @@
                     <tr>
                         <td class="header bg-primary"
                             style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #fff; background-color: #25476a; padding: 25px 0; text-align: center;">
-                            <a href="http://127.0.0.1"
+                            <a href="https://paulsabinnafoundation.org"
                                 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #bbbfc3; font-size: 19px; font-weight: bold; text-decoration: none; text-shadow: 0 1px 0 white;">
                                 Paulsabinna Foundation For The Needy
                             </a>
@@ -59,7 +59,9 @@
                                                 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; margin-bottom: 1rem; padding: 2rem; color: #555; overflow: hidden;">
                                                 <div class="f6"
                                                     style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; font-size: .875rem;">
-                                                    {{ $data['name'] }} - Fri, Aug 11, 2023 at 9:36am </div>
+                                                    {{ $data['name'] }} -
+                                                    {{ \Carbon\Carbon::parse($data['created_at'])->format('D, M j, Y \a\t g:ia') }}
+                                                </div>
                                                 <div class="f6"
                                                     style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; font-size: .875rem;">
                                                     Phone Number : {{ $data['phone'] }} </div>
@@ -74,10 +76,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <pre style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;"><code>Thanks,
-
-Paulsabinna Foundation For The Needy
-</code></pre>
+                                        <pre style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;"><code>Thanks, Paulsabinna Foundation For The Needy</code></pre>
 
 
 
@@ -96,7 +95,11 @@ Paulsabinna Foundation For The Needy
                                         style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 35px;">
                                         <p
                                             style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; line-height: 1.5em; margin-top: 0; color: #AEAEAE; font-size: 12px; text-align: center;">
-                                            © 2023 Paulsabinna Foundation For The Needy. All rights reserved.</p>
+                                            © <?php
+                                            $year = date('Y');
+                                            echo $year;
+                                            ?> Paulsabinna Foundation For The Needy. All rights
+                                            reserved.</p>
 
                                     </td>
                                 </tr>

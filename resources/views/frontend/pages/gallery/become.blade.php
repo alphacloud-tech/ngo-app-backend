@@ -145,7 +145,6 @@
 
 
 @section('scripts')
-   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 
@@ -155,6 +154,20 @@
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
+
+                // Validate form fields
+                var name = document.getElementById('name').value;
+                var image_url = document.getElementById('image_url').value;
+                var email = document.getElementById('email').value;
+                var phone = document.getElementById('phone').value;
+                var skills = document.getElementById('skills').value;
+
+                if (!name || !position || !image_url || !phone || !skills || !email) {
+                    // Show a toast indicating that some fields are empty
+                    toastr.error('Please fill in all required fields');
+                    return; // Exit the function, preventing the form submission
+                }
+
 
                 var formData = new FormData(form);
 

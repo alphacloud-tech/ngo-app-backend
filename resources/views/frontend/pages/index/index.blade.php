@@ -235,11 +235,14 @@
                             <p>{!! $featuredCause->description !!}</p>
                             <div class="d-flex align-items-center justify-content-between mt-4">
                                 <a href="{{ route('donation') }}" class="btn btn-default">Donate Now</a>
-                                <div class="share-on-text">
-                                    <strong>Share On</strong> <a href="#"><img
-                                            src="{{ asset('frontend/assets/images/facebook.svg') }}" alt></a>
-                                    <a href="#"><img src="{{ asset('frontend/assets/images/instagram.svg') }}" alt></a>
-                                </div>
+                                {{-- <div class="share-on-text">
+                                    <strong>Share On</strong>
+                                    <a href="#">
+                                        <img src="{{ asset('frontend/assets/images/facebook.svg') }}" alt>
+                                    </a>
+                                    <a href="#"><img src="{{ asset('frontend/assets/images/instagram.svg') }}" alt>
+                                    </a>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -375,7 +378,8 @@
                             <div class="row align-items-center">
                                 <div class="col-md-7">
                                     <div class="about-img-small">
-                                        <img src="{{ asset('frontend/assets/images/about_img_2.jpg') }} " class="about-us-2" alt>
+                                        <img src="{{ asset('frontend/assets/images/about_img_2.jpg') }} "
+                                            class="about-us-2" alt>
                                         <div class="since-year">
                                             <span>Since</span>
                                             14
@@ -401,7 +405,8 @@
                             <div class="row align-items-center">
                                 <div class="col-md-7">
                                     <div class="about-img-small">
-                                        <img src="{{ asset('frontend/assets/images/about_img_2.jpg') }} " class="about-us-2" alt>
+                                        <img src="{{ asset('frontend/assets/images/about_img_2.jpg') }} "
+                                            class="about-us-2" alt>
                                         <div class="since-year">
                                             <span>Since</span>
                                             14
@@ -466,50 +471,20 @@
                             <div class="col-12 col-lg-6 col-md-12">
                                 <div class="theme-collapse light">
 
-                                    <div class="toggle arrow-down">
-                                        <span class="icon">
-                                            <i class="icofont-plus"></i>
-                                        </span> What is Paulsabinna Foundation?
-                                    </div>
-
-
-                                    <div class="collapse show">
-                                        <div class="content">
-                                            Paulsabinna Foundation is a non-profit organization dedicated to transform lives
-                                            for the better.
+                                    @foreach ($faqs as $key => $item)
+                                        <div class="toggle @if ($key === 0) arrow-down @endif">
+                                            <span class="icon">
+                                                <i class="icofont-plus"></i>
+                                            </span> {{ $item->title }}
                                         </div>
-                                    </div>
 
 
-                                    <div class="toggle">
-                                        <span class="icon">
-                                            <i class="icofont-plus"></i>
-                                        </span> How can I get involved with Paulsabinna Foundation?
-                                    </div>
-
-
-                                    <div class="collapse">
-                                        <div class="content">
-                                            There are various ways to get involved with us. Volunteering, donating, becoming
-                                            a member, or attending events.
+                                        <div class="collapse @if ($key === 0) show @endif">
+                                            <div class="content">
+                                                {!! $item->description !!}
+                                            </div>
                                         </div>
-                                    </div>
-
-
-                                    <div class="toggle">
-                                        <span class="icon">
-                                            <i class="icofont-plus"></i>
-                                        </span> Where does my donation go?
-                                    </div>
-
-
-                                    <div class="collapse">
-                                        <div class="content">
-                                            Your donations go directly to support our projects and initiatives. We
-                                            prioritize transparency and accountability, ensuring that your contribution
-                                            makes a meaningful impact.
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

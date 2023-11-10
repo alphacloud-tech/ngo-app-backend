@@ -37,6 +37,7 @@
         rel="stylesheet">
 
     <link href="{{ asset('assets/vendor/summernote/summernote.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
 
     {{-- <link href=" {{ asset('assets/vendor/fullcalendar/css/fullcalendar.min.css') }}" rel="stylesheet"> --}}
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.css" rel="stylesheet">
@@ -77,7 +78,7 @@
             Nav header start
         ***********************************-->
         <div class="nav-header">
-            <a href="{{ url('/') }}" class="brand-logo">
+            <a href="{{ url('/dashboard') }}" class="brand-logo">
                 {{-- <img class="logo-abbr" src="{{ asset('assets/images/logo.png') }} " alt="">
                 <img class="logo-compact" src="{{ asset('assets/images/logo-text.png') }} " alt=""> --}}
                 {{-- <img class="brand-title" src="{{ asset('assets/images/logo-text.png') }} " alt=""> --}}
@@ -219,6 +220,8 @@
     <script src="{{ asset('assets/js/plugins-init/material-date-picker-init.js') }}"></script>
     <!-- Pickdate -->
     <script src="{{ asset('assets/js/plugins-init/pickadate-init.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins-init/datatables.init.js') }}"></script>
 
 
     {{-- <!-- Demo scripts -->

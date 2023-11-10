@@ -16,8 +16,16 @@ class CreateDonationsTable extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cause_id'); // Foreign key to the causes table
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('country');
             $table->decimal('amount', 10, 2);
+            $table->decimal('custom_amount', 10, 2)->nullable();
             $table->timestamps();
+
+            $table->foreign('cause_id')->references('id')->on('causes');
         });
     }
 

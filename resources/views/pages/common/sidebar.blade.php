@@ -14,8 +14,8 @@
                     <li><a href="./index2.html">Dashboard 2</a></li>
                 </ul>
             </li> --}}
-            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                        class="icon icon-globe-2"></i><span class="nav-text">Slider</span></a>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="icon icon-globe-2"></i><span
+                        class="nav-text">Slider</span></a>
                 <ul aria-expanded="false">
                     <li><a href="{{ route('slider.index') }}">Slider List</a></li>
                     {{-- <li><a href="./index2.html">Dashboard 2</a></li> --}}
@@ -67,8 +67,27 @@
                 </ul>
             </li>
 
-            <li class="nav-label"></li>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                        class="icon icon-globe-2"></i><span class="nav-text">FAQ</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('admin-faq.index') }}">FAQ List</a></li>
+                </ul>
+            </li>
 
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                        class="icon icon-globe-2"></i><span class="nav-text">Messages/Complains</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('messages.message') }}">Messages/Complains</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-label"></li>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                        class="icon icon-globe-2"></i><span class="nav-text">Settings</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('settings.index') }}">Settings</a></li>
+                </ul>
+            </li>
 
             @guest
             @else

@@ -26,14 +26,7 @@
     <section class="wide-tb-100 pb-0">
         <div class="container">
 
-            {{-- <div class="row mt-5">
-                <div class="col-sm-6 col-md-6 col-lg-3" id="video-list">
-
-                </div> --}}
             <div id="video-list"></div>
-
-            {{-- <div class="w-100 d-none d-sm-none d-md-block d-lg-none spacer-30"></div>
-            </div> --}}
 
     </section>
 @endsection
@@ -98,6 +91,9 @@
                 .then(response => response.json())
                 .then(data => {
                     const videoItems = data.items;
+
+                    // Remove the last video
+                    videoItems.pop();
 
                     // Create the video grid for the current page of results
                     const grid = createVideoGrid(videoItems);

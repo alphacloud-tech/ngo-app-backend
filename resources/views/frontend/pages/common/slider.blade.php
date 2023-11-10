@@ -3,13 +3,6 @@
             <div class="slides-wrap">
                 <div class="owl-carousel owl-theme">
                     @foreach ($sliders as $item)
-                        {{-- <div class="owl-slide d-flex align-items-center cover"
-                            style="background-image: url('{{ $item->image_url }}');"> --}}
-                        {{-- <div class="owl-slide d-flex align-items-center cover"
-                            style="background-image: url('{{ asset($item->image_url) }}')"> --}}
-
-                        {{-- <img src="{{ isset($welcomeNote) ? $imgPath . '/welcomenote_photo/' . $welcomeNote->image_name : '' }}"
-                            alt=" " width="230" height="270" /> --}}
                         <div class="owl-slide d-flex align-items-center cover"
                             style="background-image: url('{{ $imgPath . '/' . $item->image_url }}');">
 
@@ -27,8 +20,8 @@
                                                     Us
                                                     Now</a>
                                                 <a class="slider-link popup-video"
-                                                    href="{{ asset('frontend/assets/images/vi.mp4') }}">Watch the video <i
-                                                        class="charity-play_button"></i></a>
+                                                    href="{{ asset('frontend/assets/images/vi.mp4') }}">Watch the video
+                                                    <i class="charity-play_button"></i></a>
                                             </div>
                                         </div>
                                     </div>

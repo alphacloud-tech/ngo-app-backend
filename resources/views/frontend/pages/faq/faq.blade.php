@@ -32,100 +32,42 @@
                     </h1>
                     <div class="theme-collapse">
 
-                        <div class="toggle arrow-down">
-                            <span class="icon">
-                                <i class="icofont-plus"></i>
-                            </span> What is Paulsabinna Foundation?
-                        </div>
-
-
-                        <div class="collapse show">
-                            <div class="content">
-                                Paulsabinna Foundation is a non-profit organization dedicated to transform lives
-                                for the better.
+                        @foreach ($faqs as $key => $item)
+                            <div class="toggle @if ($key === 0) arrow-down @endif">
+                                <span class="icon">
+                                    <i class="icofont-plus"></i>
+                                </span> {{ $item->title }}
                             </div>
-                        </div>
 
 
-                        <div class="toggle">
-                            <span class="icon">
-                                <i class="icofont-plus"></i>
-                            </span> How can I get involved with Paulsabinna Foundation?
-                        </div>
-
-
-                        <div class="collapse">
-                            <div class="content">
-                                There are various ways to get involved with us. Volunteering, donating, becoming
-                                a member, or attending events.
+                            <div class="collapse @if ($key === 0) show @endif">
+                                <div class="content">
+                                    {!! $item->description !!}
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
 
 
-                        <div class="toggle">
-                            <span class="icon">
-                                <i class="icofont-plus"></i>
-                            </span> Where does my donation go?
-                        </div>
-
-
-                        <div class="collapse">
-                            <div class="content">
-                                Your donations go directly to support our projects and initiatives. We
-                                prioritize transparency and accountability, ensuring that your contribution
-                                makes a meaningful impact.
-                            </div>
-                        </div>
-
-
-                        <div class="toggle">
-                            <span class="icon">
-                                <i class="icofont-plus"></i>
-                            </span> How do I donate to Paulsabinna Foundation?
-                        </div>
-
-
-                        <div class="collapse">
-                            <div class="content">
-                                Donating is easy. You can make a one-time donation or become a monthly donor through our
-                                website. Visit our "Donate" page to make a contribution.
-                            </div>
-                        </div>
-
-
-                        <div class="toggle">
-                            <span class="icon">
-                                <i class="icofont-plus"></i>
-                            </span> Can my company partner with Paulsabinna Foundation?
-                        </div>
-
-
-                        <div class="collapse">
-                            <div class="content">
-                                We welcome corporate partnerships. Contact us to explore collaboration opportunities and
-                                discuss how your company can make a positive impact.
-                            </div>
-                        </div>
 
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-5">
                     <div class="faqs-sidebar pos-rel">
                         <div class="bg-overlay blue opacity-80"></div>
-                        <form>
+                        <form id="faq_form">
                             @csrf
                             <h3 class="h3-sm fw-5 txt-white mb-3">Have any Question?</h3>
                             <div class="form-group">
                                 <label for="name"><strong>Full Name</strong></label>
-                                <input type="text" class="form-control form-light" id="name">
+                                <input type="text" class="form-control form-light" id="name" name="name">
                             </div>
                             <div class="form-group">
                                 <label for="email"><strong>Email Address</strong></label>
-                                <input type="email" class="form-control form-light" id="email">
+                                <input type="email" class="form-control form-light" id="email" name="email">
                             </div>
                             <div class="form-group">
-                                <label for="msg"><strong>How can help you?</strong></label>
-                                <textarea class="form-control form-light" rows="5" id="msg"></textarea>
+                                <label for="message"><strong>How can help you?</strong></label>
+                                <textarea class="form-control form-light" rows="5" id="message" name="message"></textarea>
                             </div>
                             <button type="submit" class="btn btn-default mt-3">Ask It Now</button>
                         </form>
@@ -158,16 +100,58 @@
 
 
 @section('styles')
-    {{-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> --}}
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 @endsection
 
 
 @section('scripts')
-    {{-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="{{ asset('js/multislider.js') }}"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.getElementById('faq_form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Validate form fields
+                var name = document.getElementById('name').value;
+                var email = document.getElementById('email').value;
+                var message = document.getElementById('message').value;
+
+                if (!name || !email || !message) {
+                    // Show a toast indicating that some fields are empty
+                    toastr.error('Please fill in all required fields');
+                    return; // Exit the function, preventing the form submission
+                }
+
+                var formData = new FormData(form);
+
+                axios.post('{{ url('/faq') }}', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data', // Important for FormData
+                        }
+                    })
+                    .then(function(response) {
+                        // Handle success, e.g., show a success message or redirect
+                        if (response.data.success) {
+                            // form.reset();
+                            document.getElementById('name').value = '';
+                            document.getElementById('email').value = '';
+                            document.getElementById('message').value = '';
+
+                            toastr.success(response.data.message);
+                        }
+                    })
+                    .catch(function(error) {
+                        // // Handle errors, e.g., show an error message
+                        // alert('Image upload failed: ' + error.response.data.error);
+                        console.log('====================================');
+                        console.log("faile request", error);
+                        console.log('====================================');
+                    });
+            });
+        });
+    </script>
 @endsection

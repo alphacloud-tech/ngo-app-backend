@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\BlogPost;
 use App\Category;
+use App\Complain;
+use App\Faq;
+use App\Notifications\AdminContactNotification;
+use App\Notifications\FaqNotification;
 use App\Notifications\NewVolunteerNotification;
+use App\Setting;
 use App\User;
 use App\Volunteer;
 use Session;
@@ -56,6 +61,11 @@ class IndexController extends MainController
         $data['blogs'] = BlogPost::latest() // Retrieve the latest blog
             ->with('category') // Eager load the related category
             ->where('active', 1)
+            ->get();
+
+        $data['faqs'] = Faq::latest() // Retrieve the latest blog
+            ->where('active', 1)
+            ->take(6)
             ->get();
 
         Session::put('getPath', $this->imagePath());
@@ -251,18 +261,76 @@ class IndexController extends MainController
 
     public function contact()
     {
-        return view('frontend.pages.contact.contact');
+        $setting = Setting::where('id', 1)->first();
+        return view('frontend.pages.contact.contact', compact('setting'));
+    }
+
+    public function contactSubmit(Request $request)
+    {
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'message' => 'required',
+        ]);
+
+        $data = $request->all(); // Get all form data
+
+        // Save the data to the database (assuming you have a Model for members)
+        Complain::create($data);
+
+
+        $adminUser = User::where('email', 'adesanjo470@gmail.com')->first();
+
+        if ($adminUser) {
+            $adminUser->notify(new AdminContactNotification($data));
+        }
+
+        return response()->json(['success' => true, 'message' => 'Thank you for contacting us; we\'ll get back to you as soon as possible.']);
     }
 
 
     public function donation()
     {
-        return view('frontend.pages.donation.donation');
+        $data['causes'] = DB::table('causes')
+            ->join('cause_categories', 'causes.cause_category_id', '=', 'cause_categories.id')
+            ->select('causes.*', 'cause_categories.name as category_name')
+            ->orderBy('causes.created_at', 'desc')
+            ->get();
+        return view('frontend.pages.donation.donation', $data);
     }
+
     public function faq()
     {
-        return view('frontend.pages.faq.faq');
+        $data['faqs'] = Faq::latest() // Retrieve the latest blog
+            ->where('active', 1)
+            ->get();
+
+        return view('frontend.pages.faq.faq', $data);
     }
+
+
+    public function faqNotification(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'message' => 'required',
+        ]);
+
+        $data = $request->all(); // Get all form data
+
+        $adminUser = User::where('email', 'adesanjo470@gmail.com')->first();
+
+        if ($adminUser) {
+            $adminUser->notify(new FaqNotification($data));
+        }
+
+        return response()->json(['success' => true, 'message' => 'Feel free to reach out if you have more questions. We\'re here to help. Thank you!']);
+    }
+
+
 
     public function video()
     {

@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\Payment\DonationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,10 +48,17 @@ Route::get('/event-detail/{id}', [IndexController::class, "eventDetail"])->name(
 Route::get('/blogs', [IndexController::class, "blog"])->name('blog');
 Route::get('/blogs-detail/{id}', [IndexController::class, "blogDetail"])->name('blog.single');
 
-Route::any('/contact-us', [IndexController::class, "contact"])->name('contact');
+Route::get('/contact-us', [IndexController::class, "contact"])->name('contact');
+Route::post('/contact-us', [IndexController::class, "contactSubmit"])->name('contact.store');
 
 Route::get('/donation', [IndexController::class, "donation"])->name('donation');
+
+Route::post('/pay', [DonationController::class, 'redirectToGateway'])->name('pay');
+Route::get('/payment/callback', [DonationController::class, 'handleGatewayCallback']);
+
 Route::get('/faq', [IndexController::class, "faq"])->name('faq');
+Route::post('/faq', [IndexController::class, "faqNotification"])->name('faq.store');
+
 Route::get('/image-gallery', [IndexController::class, "gallery"])->name('gallery');
 Route::get('/video-gallery', [IndexController::class, "video"])->name('video');
 Route::get('/team', [IndexController::class, "volunteer"])->name('volunteer');
@@ -79,6 +87,8 @@ Route::post('/contact', 'ContactController@store')->name('contact.store');
 Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('home');
+Route::get('/messages', 'HomeController@message')->name('messages.message');
+Route::delete('/messages-destroy/{id}', 'HomeController@messageDestroy')->name('messages.destroy');
 
 // Route::group(['middleware' => ['auth']], function () {
 // });
@@ -114,3 +124,16 @@ Route::post('/blog-activate/{blog}', 'BlogPostController@activation');
 
 // Resourceful routes for categories
 Route::resource('categories', 'CategoryController');
+Route::resource('admin-faq', 'FaqController');
+Route::post('/faq-activate/{admin_faq}', 'FaqController@activation');
+
+
+Route::get('settings', 'SettingController@index')->name('settings.index');
+Route::put('logo/{id}', 'SettingController@logo')->name('logo.update');
+Route::put('favicon/{id}', 'SettingController@favicon')->name('favicon.update');
+Route::put('company-name/{id}', 'SettingController@companyName')->name('company_name.update');
+Route::put('phone/{id}', 'SettingController@phone')->name('phone.update');
+Route::put('email/{id}', 'SettingController@email')->name('email.update');
+Route::put('address/{id}', 'SettingController@address')->name('address.update');
+Route::put('description/{id}', 'SettingController@description')->name('description.update');
+Route::put('social/{id}', 'SettingController@social')->name('social.update');

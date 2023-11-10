@@ -42,12 +42,12 @@
                         </div>
                         <div id="sucessmessage"> </div>
 
-                        <form action="#" method="post" id="contact_form" novalidate="novalidate">
+                        <form action="#" method="post" id="contact_form_new">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 mb-0">
                                     <div class="form-group">
-                                        <input type="text" name="firstname" id="name" class="form-control"
+                                        <input type="text" name="firstname" id="firstname" class="form-control"
                                             placeholder="First Name" value="{{ old('firstname') }}">
                                     </div>
 
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="col-md-6 mb-0">
                                     <div class="form-group">
-                                        <input type="text" name="email" id="email" class="form-control"
+                                        <input type="email" name="email" id="email" class="form-control"
                                             placeholder="Your Email" value="{{ old('email') }}">
                                     </div>
                                     @error('email')
@@ -75,7 +75,7 @@
                                 </div>
                                 <div class="col-md-6 mb-0">
                                     <div class="form-group">
-                                        <input type="number" name="phone" id="phone" class="form-control"
+                                        <input type="text" name="phone" id="phone" class="form-control"
                                             placeholder="Phone Number" value="{{ old('phone') }}">
                                     </div>
                                     @error('phone')
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="col-md-12 mb-0">
                                     <div class="form-group">
-                                        <textarea name="message" id="comment" class="form-control" rows="6" placeholder="Message"></textarea>
+                                        <textarea name="message" id="message" class="form-control" rows="6" placeholder="Message"></textarea>
                                     </div>
                                     @error('message')
                                         <p class="text-danger">{{ $message }}</p>
@@ -103,14 +103,14 @@
                     <div class="icon-box-4 bg-orange mb-4">
                         <i data-feather="map-pin"></i>
                         <h3>Our Address</h3>
-                        <div>Envato Pty Ltd 13/2 Elizabeth St melbourne VLC 3000 Australia</div>
+                        <div>{{ $setting->address }} </div>
                     </div>
 
 
                     <div class="icon-box-4 bg-green mb-4">
                         <i data-feather="phone"></i>
                         <h3>Phone Number</h3>
-                        <div>+1234567899<br>1-800-763-5400</div>
+                        <div>{{ $setting->phone_1 }}<br>{{ $setting->phone_2 }}</div>
                     </div>
 
 
@@ -118,19 +118,20 @@
                         <i data-feather="mail"></i>
                         <h3>Email Address</h3>
                         <div>
-                            <a href="">
-                                <span class="__cf_email__"
-                                    data-cfemail="9cf5f2faf3dcf4f3ecf9eefdf5eff9b2fff3f1">[email&#160;protected]
+                            <a href="mailto:{!! obfuscateEmail($setting->email_1) !!}">
+                                <span class="" data-cfemail="{!! obfuscateEmail($setting->email_1) !!}">{!! obfuscateEmail($setting->email_1) !!}
                                 </span>
                             </a>
+
 
                             {{-- <a href="mailto:{!! obfuscateEmail($event->email) !!}">{!! obfuscateEmail($event->email) !!}</a> --}}
 
                         </div>
-                        <div><a
-                                href="https://mannatstudio.com/cdn-cgi/l/email-protection#592f36352c372d3c3c2b193136293c2b38302a3c773a3634"><span
-                                    class="__cf_email__"
-                                    data-cfemail="eb9d84879e859f8e8e99ab83849b8e998a82988ec5888486">[email&#160;protected]</span></a>
+                        <div>
+                            <a href="mailto:{!! obfuscateEmail($setting->email_2) !!}">
+                                <span class="" data-cfemail="{!! obfuscateEmail($setting->email_2) !!}">{!! obfuscateEmail($setting->email_2) !!}
+                                </span>
+                            </a>
                         </div>
                     </div>
 
@@ -178,53 +179,27 @@
 
 
 @section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
-    <script>
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     // Form submission event listener
-        //     document.getElementById('contactForm').addEventListener('submit', function(event) {
-        //         event.preventDefault(); // Prevent the default form submission
-
-        //         // Get form data
-        //         const name = document.getElementById('name').value;
-        //         const email = document.getElementById('email').value;
-        //         const message = document.getElementById('message').value;
-
-        //         // Simulate form submission (replace this with your actual AJAX submission)
-        //         // For demonstration purposes, simulate a successful submission
-        //         setTimeout(function() {
-        //             // Show a success toast message
-        //             toastr.success('Message sent successfully');
-
-        //             // Reset the form
-        //             document.getElementById('name').value = '';
-        //             document.getElementById('email').value = '';
-        //             document.getElementById('message').value = '';
-        //         }, 2000); // Simulate a 2-second delay for demonstration
-
-        //         return false; // Prevent form submission
-        //     });
-
-        //     // Initialize Toastr options
-        //     toastr.options = {
-        //         closeButton: true,
-        //         progressBar: true,
-        //         positionClass: 'toast-top-right',
-        //         timeOut: 3000, // 3 seconds
-        //     };
-        // });
-    </script>
-
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var form = document.getElementById('contact_form');
+            var form = document.getElementById('contact_form_new');
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
+
+                // Validate form fields
+                var firstname = document.getElementById('firstname').value;
+                var lastname = document.getElementById('lastname').value;
+                var email = document.getElementById('email').value;
+                var phone = document.getElementById('phone').value;
+                var message = document.getElementById('message').value;
+
+                if (!firstname || !lastname || !email || !phone || !message) {
+                    // Show a toast indicating that some fields are empty
+                    toastr.error('Please fill in all required fields');
+                    return; // Exit the function, preventing the form submission
+                }
 
                 var formData = new FormData(form);
 
@@ -236,13 +211,22 @@
                     .then(function(response) {
                         // Handle success, e.g., show a success message or redirect
                         if (response.data.success) {
-                            form.reset();
+                            // form.reset();
+                            document.getElementById('firstname').value = '';
+                            document.getElementById('lastname').value = '';
+                            document.getElementById('email').value = '';
+                            document.getElementById('phone').value = '';
+                            document.getElementById('message').value = '';
+
                             toastr.success(response.data.message);
                         }
                     })
                     .catch(function(error) {
-                        // Handle errors, e.g., show an error message
-                        alert('Image upload failed: ' + error.response.data.error);
+                        // // Handle errors, e.g., show an error message
+                        // alert('Image upload failed: ' + error.response.data.error);
+                        console.log('====================================');
+                        console.log("faile request", error);
+                        console.log('====================================');
                     });
             });
         });
